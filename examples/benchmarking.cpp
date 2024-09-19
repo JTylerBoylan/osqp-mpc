@@ -44,7 +44,7 @@ using namespace std::chrono;
 
 int main()
 {
-    printf("Inverted Pendulum on a Cart MPC Example\n");
+    printf("MPC Benchmarking\n");
 
     // set OSQP settings to default
     auto settings = std::make_unique<OSQPSettings>();

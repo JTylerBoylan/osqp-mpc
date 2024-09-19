@@ -223,6 +223,7 @@ The objective is to minimize a quadratic function with respect to the decision v
 - $\mathbf{z} \in \mathbb{R}^{n}$: The decision variable vector, which typically includes both state and control variables over the prediction horizon.
 - $\mathbf{H} \in \mathbb{R}^{n \times n}$: The Hessian matrix, representing the quadratic cost terms. It is a sparse, symmetric, positive semi-definite matrix.
 - $\mathbf{g} \in \mathbb{R}^{n}$: The gradient vector, representing the linear cost terms.
+- $n$: The total number of states and control inputs.
 
 #### Constraints
 
@@ -245,7 +246,7 @@ To convert the previously defined MPC problem into a QP problem that can be solv
 QPProblem qp = getQPProblem(mpc);
 ```
 
-This function `getQPProblem` takes the `MPCProblem` as input and returns a `QPProblem` struct. The QPProblem struct contains the matrices and vectors ($\mathbf{H}$, $\mathbf{g}$, $\mathbf{A}_c$, $\mathbf{l}_c$, and $\mathbf{u}_c$) necessary to solve the QP problem with OSQP.
+The function `getQPProblem` takes the MPC problem as input and returns a `QPProblem` struct. The `QPProblem` struct contains the matrices and vectors ($\mathbf{H}$, $\mathbf{g}$, $\mathbf{A}_c$, $\mathbf{l}_c$, and $\mathbf{u}_c$) necessary to solve the QP problem with OSQP.
 
 This conversion allows the MPC problem to be efficiently handled by QP solvers, enabling real-time optimization in control applications.
 
@@ -258,9 +259,9 @@ Once the MPC or QP problem has been formulated, you can solve it using the OSQP 
 First, create and configure the OSQP solver settings:
 
 ```
-auto settings = std::make_unique<OSQPSettings>();
-osqp_set_default_settings(settings.get());
-// settings->verbose = false;
+OSQPSettings settings;
+osqp_set_default_settings(&settings);
+// settings.verbose = false;
 ```
 
 - `settings`: This object holds the configuration parameters for the OSQP solver, such as the maximum number of iterations, tolerance values, and verbosity. The default settings are often sufficient, but they can be customized as needed.
@@ -270,7 +271,7 @@ osqp_set_default_settings(settings.get());
 If you're working directly with an `MPCProblem`, you can solve it using the `solveMPC` function:
 
 ```
-MPCSolution mpc_sol = solveMPC(mpc, settings)
+MPCSolution mpc_sol = solveMPC(mpc, &settings)
 ```
 
 - `mpc_sol`: This object contains the solution to the MPC problem, including optimal state and control trajectories over the prediction horizon.
@@ -281,7 +282,7 @@ MPCSolution mpc_sol = solveMPC(mpc, settings)
 Alternatively, if you've already converted your MPC problem into a QP problem, you can solve it directly using the `solveOSQP` function:
 
 ```
-QPSolution qp_sol = solveOSQP(qp, settings);
+QPSolution qp_sol = solveOSQP(qp, &settings);
 ```
 
 - `qp_sol`: This object contains the solution to the QP problem, including the optimal decision variables.

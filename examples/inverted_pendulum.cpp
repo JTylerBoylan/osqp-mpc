@@ -1,8 +1,5 @@
 #include "osqp_mpc.hpp"
 
-#include <iostream>
-#include <memory>
-
 // Inverted Pendulum on a Cart MPC Example
 // https://ctms.engin.umich.edu/CTMS/?example=InvertedPendulum&section=SystemModeling
 
@@ -118,9 +115,9 @@ int main()
     printf("Inverted Pendulum on a Cart MPC Example\n");
 
     // set OSQP settings to default
-    auto settings = std::make_unique<OSQPSettings>();
-    osqp_set_default_settings(settings.get());
-    settings->verbose = false;
+    OSQPSettings settings;
+    osqp_set_default_settings(&settings);
+    settings.verbose = false;
 
     // initialize MPC problem
     MPCProblem mpc(WINDOW_SIZE);
@@ -156,7 +153,7 @@ int main()
                i, mpc.x0(0), mpc.x0(1), mpc.x0(2), mpc.x0(3), error);
 
         // solve
-        const MPCSolution mpc_sol = solveMPC(mpc, settings.get());
+        const MPCSolution mpc_sol = solveMPC(mpc, &settings);
 
         // check for errors
         if (mpc_sol.exit_flag != OSQP_SOLVED)

@@ -1,7 +1,5 @@
 #include "osqp_mpc.hpp"
 
-#include <iostream>
-#include <memory>
 #include <chrono>
 
 #define START_WINDOW_SIZE 5
@@ -47,9 +45,9 @@ int main()
     printf("MPC Benchmarking\n");
 
     // set OSQP settings to default
-    auto settings = std::make_unique<OSQPSettings>();
-    osqp_set_default_settings(settings.get());
-    settings->verbose = false;
+    OSQPSettings settings;
+    osqp_set_default_settings(&settings);
+    settings.verbose = false;
 
     for (std::size_t N = START_WINDOW_SIZE; N <= END_WINDOW_SIZE; N += WINDOW_SIZE_STEP)
     {
@@ -62,7 +60,7 @@ int main()
         high_resolution_clock::time_point t4 = high_resolution_clock::now();
 
         high_resolution_clock::time_point t5 = high_resolution_clock::now();
-        QPSolution solution = solveOSQP(qp, settings.get());
+        QPSolution solution = solveOSQP(qp, &settings);
         high_resolution_clock::time_point t6 = high_resolution_clock::now();
 
         duration<double> time_span1 = duration_cast<duration<double>>(t2 - t1);

@@ -223,7 +223,7 @@ The objective is to minimize a quadratic function with respect to the decision v
 - $\mathbf{z} \in \mathbb{R}^{n}$: The decision variable vector, which typically includes both state and control variables over the prediction horizon.
 - $\mathbf{H} \in \mathbb{R}^{n \times n}$: The Hessian matrix, representing the quadratic cost terms. It is a sparse, symmetric, positive semi-definite matrix.
 - $\mathbf{g} \in \mathbb{R}^{n}$: The gradient vector, representing the linear cost terms.
-- $n$: The total number of states and control inputs.
+- $n$: Size of the decision variable vector.
 
 #### Constraints
 

@@ -264,11 +264,13 @@ struct MPCSolution : public QPSolution
         }
 
         ustar.resize(mpc.N - 1);
+        Eigen::Index nu_offset = 0;
         for (std::size_t i = 0; i < mpc.N - 1; ++i)
         {
             const auto num_states = mpc.Q[i].cols();
             const auto num_controls = mpc.R[i].cols();
-            ustar[i] = qp_sol.zstar.segment(mpc.N * num_states + i * num_controls, num_controls);
+            ustar[i] = qp_sol.zstar.segment(mpc.N * num_states + nu_offset, num_controls);
+            nu_offset += num_controls;
         }
     }
 };
